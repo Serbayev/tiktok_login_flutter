@@ -77,12 +77,39 @@ class TiktokLoginFlutterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware 
         request.callerLocalEntry = "com.raiinmaker.tiktok_login_flutter.tiktokapi.TikTokEntryActivity"
         tiktokOpenApi.authorize(request);
       } catch (e: Exception) {
-        result.error(
-                "AUTHORIZATION_REQUEST_FAILED",
-                e.localizedMessage,
-                null
-        )
+        when (e) {
+          is AuthorizationException -> {
+            val errorCode = e.errorCode
+            val errorMessage = e.localizedMessage
 
+            when (errorCode) {
+              10002 -> result.error("ERROR_PARAMETER", errorMessage, null)
+              10003 -> result.error("ERROR_ILLEGAL_CONFIGURATION", errorMessage, null)
+              10004 -> result.error("ERROR_ILLEGAL_SCOPE", errorMessage, null)
+              10005 -> result.error("ERROR_MISSING_PARAMETERS", errorMessage, null)
+              10006 -> result.error("ERROR_ILLEGAL_REDIRECTION_URI", errorMessage, null)
+              10007 -> result.error("ERROR_AUTHORIZATION_CODE_EXPIRED", errorMessage, null)
+              10008 -> result.error("ERROR_ILLEGAL_CALL_CREDENTIALS", errorMessage, null)
+              10009 -> result.error("ERROR_ILLEGAL_PARAMETER", errorMessage, null)
+              10010 -> result.error("ERROR_REFRESH_TOKEN_EXPIRED", errorMessage, null)
+              10011 -> result.error("ERROR_INCONSISTENT_PACKAGE_NAME", errorMessage, null)
+              10012 -> result.error("ERROR_APP_UNDER_REVIEW", errorMessage, null)
+              10013 -> result.error("ERROR_CLIENT_KEY_SECRET", errorMessage, null)
+              10014 -> result.error("ERROR_INCONSISTENT_CLIENT_KEY", errorMessage, null)
+              10015 -> result.error("ERROR_APPLICATION_TYPE", errorMessage, null)
+              10017 -> result.error("ERROR_AUTHORIZATION_FAILED", errorMessage, null)
+              2190002 -> result.error("ERROR_INVALID_ACCESS_TOKEN", errorMessage, null)
+              2190003 -> result.error("ERROR_USER_NOT_AUTHORIZED", errorMessage, null)
+              2190008 -> result.error("ERROR_ACCESS_TOKEN_EXPIRED", errorMessage, null)
+              6007061 -> result.error("ERROR_LOW_TIKTOK_VERSION", errorMessage, null)
+              6007062 -> result.error("ERROR_AGE_RESTRICTION", errorMessage, null)
+              else -> result.error("ERROR_OAUTH", errorMessage, null)
+            }
+          }
+          else -> {
+            result.error("ERROR_AUTHORIZATION_REQUEST_FAILED", e.localizedMessage, null)
+          }
+        }
       }
   }
 
