@@ -13,7 +13,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-
+import com.raiinmaker.tiktok_login_flutter.exceptions.AuthorizationException
 
 
 /** TiktokLoginFlutterPlugin */
